@@ -1,3 +1,10 @@
+cocaine-orca (0.1.50) unstable; urgency=low
+
+  * feat: update framework to 0.12.14.6
+  * feat: Support TVM2
+
+ -- Artem Selishchev <arselishev@gmail.com>  Mon, 08 Oct 2018 17:26:18 +0300
+
 cocaine-orca (0.1.49) unstable; urgency=medium
 
   * refact: remove control_filter
