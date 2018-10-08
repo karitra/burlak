@@ -157,14 +157,16 @@ class Config(object):
                     'type': 'string',
                     'allowed': [
                         'tvm',
+                        'tvm2',
                         'TVM',
+                        'TVM2',
                         'promiscuous',
                         'test1', 'test2'
                     ]
                 },
                 'client_id': {'type': 'integer'},
                 'client_secret': {'type': 'string'},
-                'tok_update': {'type': 'integer', 'required': False},
+                'token_expiration_s': {'type': 'integer', 'required': False},
             },
         },
         'unicorn_service_name': {
@@ -431,16 +433,9 @@ class Config(object):
     @property
     def secure(self):
         secure_conf = self._config.get('secure', {})
+        secure_conf.setdefault('token_expiration_s', Defaults.TOK_UPDATE_SEC)
 
-        mod = secure_conf.get('mod', 'promisc')
-
-        client_id = secure_conf.get('client_id', 0)
-        client_secret = secure_conf.get('client_secret', '')
-        tok_update = secure_conf.get(
-            'tok_update_sec',
-            Defaults.TOK_UPDATE_SEC)
-
-        return mod, client_id, client_secret, tok_update
+        return secure_conf
 
     @property
     def web_endpoint(self):

@@ -11,9 +11,7 @@ import click
 
 from cocaine.logger import Logger
 
-# TODO: not released yet!
-# from cocaine.services import SecureServiceFabric, Service
-from cocaine.services import Service
+from cocaine.services import Service, SecureServiceFactory
 
 from tornado import queues
 from tornado.ioloop import IOLoop
@@ -21,7 +19,6 @@ from tornado.ioloop import IOLoop
 from .comm_state import CommittedState
 from .config import Config
 from .context import Context, LoggerSetup
-from .helpers import SecureServiceFabric
 from .mokak.mokak import SharedStatus, make_status_web_handler
 from .semaphore import Semaphore
 from .sentry import SentryClientWrapper
@@ -81,9 +78,13 @@ def main(
 
     logger = Logger(config.locator_endpoints)
 
-    unicorn = SecureServiceFabric.make_secure_adaptor(
-        Service(config.unicorn_name, config.locator_endpoints),
-        *config.secure, endpoints=config.locator_endpoints)
+    unicorn = SecureServiceFactory.make_secure_adaptor(
+        Service(
+            config.unicorn_name,
+            config.locator_endpoints
+        ),
+        **config.secure
+    )
 
     node = Service(config.node_name, config.locator_endpoints)
 

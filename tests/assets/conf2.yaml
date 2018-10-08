@@ -1,8 +1,8 @@
 secure:
-  mod: tvm
+  mod: tvm2
   client_id: 42
   client_secret: not as secret at all
-  tok_update_sec: 600
+  token_expiration_s: 600
 
 unicorn_service_name: big_unicorn
 

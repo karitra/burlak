@@ -6,34 +6,42 @@ import pytest
 
 
 good_secret_conf = [
-    ('tests/assets/conf1.yaml',
-        'test1', 100500, 'top secret', Defaults.TOK_UPDATE_SEC),
-    ('tests/assets/conf2.yaml',
-        'tvm', 42, 'not as secret at all', 600),
+    ('tests/assets/conf1.yaml', dict(
+        mod='test1',
+        client_id=100500,
+        client_secret='top secret',
+        token_expiration_s=Defaults.TOK_UPDATE_SEC
+    )),
+    ('tests/assets/conf2.yaml', dict(
+        mod='tvm2',
+        client_id=42,
+        client_secret='not as secret at all',
+        token_expiration_s=600
+    )),
 ]
 
 empty_conf = 'tests/assets/empty.conf.yaml'
 
-default_secure = ('promisc', 0, '', Defaults.TOK_UPDATE_SEC)
+default_secure = dict(token_expiration_s=Defaults.TOK_UPDATE_SEC)
 
 shared_status = SharedStatus()
 
 
 @pytest.mark.parametrize(
-    'config_file,mod,cid,secret,update', good_secret_conf)
-def test_secure_config(config_file, mod, cid, secret, update):
+    'config_file,secure', good_secret_conf)
+def test_secure_config(config_file, secure):
     cfg = Config(shared_status)
     cnt = cfg.update([config_file])
 
-    assert cfg.secure == (mod, cid, secret, update)
+    assert cfg.secure == secure
     assert cnt == 1
 
 
 def test_config_group():
     cfg = Config(shared_status)
-    cnt = cfg.update([conf for conf, _, _, _, _ in good_secret_conf])
+    cnt = cfg.update([conf for conf, _ in good_secret_conf])
 
-    assert cfg.secure == (good_secret_conf[-1][1:])
+    assert cfg.secure == good_secret_conf[-1][1]
     assert cnt == len(good_secret_conf)
 
 
@@ -45,13 +53,13 @@ def test_broken_conf():
 
 
 def test_config_group_with_broken():
-    conf_files = [conf for conf, _, _, _, _ in good_secret_conf]
+    conf_files = [conf for conf, _ in good_secret_conf]
     conf_files.append(empty_conf)
 
     cfg = Config(shared_status)
     cnt = cfg.update(conf_files)
 
-    assert cfg.secure == (good_secret_conf[-1][1:])
+    assert cfg.secure == good_secret_conf[-1][1]
     assert cnt == len(good_secret_conf) + 1
 
 

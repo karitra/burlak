@@ -14,7 +14,7 @@ import click
 
 from collections import namedtuple
 
-from cocaine.services import Service
+from cocaine.services import Service, SecureServiceFactory
 
 from tornado import gen, httpclient
 from tornado.ioloop import IOLoop
@@ -22,7 +22,6 @@ from tornado.ioloop import IOLoop
 import yaml
 
 from ..config import Config
-from ..helpers.secadaptor import SecureServiceFabric
 from ..mokak.mokak import SharedStatus
 from ..uniresis import catchup_an_uniresis
 
@@ -208,9 +207,13 @@ def main(
         EchoWeb=[(DEFAULT_PROFILE1, 50), (DEFAULT_PROFILE2, 10)],
     )
 
-    # TODO: not yet implemented (released actually) in framework!
-    unicorn = SecureServiceFabric.make_secure_adaptor(
-        Service('unicorn'), *config.secure, endpoints=config.locator_endpoints)
+    unicorn = SecureServiceFactory.make_secure_adaptor(
+        Service(
+            'unicorn',
+            config.locator_endpoints
+        ),
+        *config.secure
+    )
 
     IOLoop.current().run_sync(
         lambda:
