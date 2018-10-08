@@ -8,7 +8,7 @@ Standards-Version: 3.9.5
 Package: cocaine-orca
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends},
-  cocaine-framework-python (>= 0.12.13.2),
+  cocaine-framework-python (>= 0.12.14.6),
   python-tornado (>= 4.3),
   python-click (>= 5.0),
   python (>= 2.7),
