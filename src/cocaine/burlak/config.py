@@ -275,6 +275,12 @@ class Config(object):
             'type': 'boolean',
             'required': False,
         },
+        'control_retry_attempts': {
+            'type': 'integer',
+            'min': 0,
+            'max': 2**16,
+            'required': False,
+        },
         # TODO(Config): deprecated, remove!
         'stop_by_control': {
             'type': 'boolean',
@@ -481,6 +487,12 @@ class Config(object):
         return self._config.get(
             'locator_endpoints',
             [[default_host, default_port], ])
+
+    @property
+    def control_retry_attempts(self):
+        return self._config.get(
+            'control_retry_attempts',
+            Defaults.CONTROL_RETRY_ATTEMPTS)
 
     @property
     def stop_apps(self):

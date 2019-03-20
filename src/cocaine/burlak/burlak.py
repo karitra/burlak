@@ -38,13 +38,11 @@ from .semaphore import LockHolder
 from .mixins import *
 
 
-CONTROL_RETRY_ATTEMPTS = 3
-
 DEFAULT_RETRY_TIMEOUT_SEC = 15
 DEFAULT_UNKNOWN_VERSIONS = 1
 
 DEFAULT_RETRY_ATTEMPTS = 4
-DEFAULT_RETRY_EXP_BASE_SEC = 4
+DEFAULT_RETRY_EXP_BASE_SEC = 30
 
 SYNC_COMPLETION_TIMEOUT_SEC = 600
 
@@ -957,7 +955,7 @@ class AppsElysium(LoggerMixin, MetricsMixin, LoopSentry):
                 isinstance(e, ServiceError) and \
                 e.code == INVALID_STATE_ERR_CODE
 
-        attempts = CONTROL_RETRY_ATTEMPTS
+        attempts = self.context.config.control_retry_attempts
         while attempts:
             try:
                 yield self.write_to_channel(app, to_adjust)

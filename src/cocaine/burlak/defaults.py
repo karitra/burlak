@@ -47,6 +47,7 @@ class Defaults(object):
     APPS_POLL_INTERVAL_SEC = 60
     INPUT_QUEUE_SIZE = 1024
 
+    CONTROL_RETRY_ATTEMPTS = 65000
     STOP_BY_CONTROL = True
     CONTROL_WITH_ACK = False
 
